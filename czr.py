@@ -1,9 +1,12 @@
 # czr.py is a Caeser Cipher Tool started by Aggredicus on 3/27/18
+# Feel free to adapt these simple tools to your own purposes, but please credit me (Aggredicus) while doing so!
 
-# The tkinter GUI template was pulled from University of Cape Town with the following attribution:
-# © Copyright 2013, 2014, University of Cape Town and individual contributors. This work is released under the CC BY-SA 4.0 licence. Revision 8e685e710775. 
+# The tkinter GUI was adapted from the tkinter documentation at the following URL: http://www.tkdocs.com/tutorial/firstexample.html#code
+# Tkinter Docs Attribution below:
+# "All material on this site is Copyright © 2007-2017 Mark Roseman. This work is licensed under a Creative Commons Attribution-Noncommercial-Share Alike 2.5 Canada License. If you have any questions regarding the use of the material on this site, including possible uses not covered by the license, please don't hesitate to email Mark."
 
-from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E
+from tkinter import *
+from tkinter import ttk
 
 # Caeser Cipher
 
@@ -73,71 +76,41 @@ def czr_full_encrypt(shift_value, full_string):
 
 # Tkinter GUI
 
-class Czr:
-
-    def __init__(self, master):
-        self.master = master
-        master.title("Caeser Cipher Tool")
-
-        self.message = 'Enter your message here.'
-        self.message_2 = 'Enter your letter shift value here.'
-        self.entered_number = 'Enter your message here.'
-        self.entered_number_2 = "Enter your letter shift value here.'
-
-        self.message_label_text = IntVar()
-        self.message_label_text.set(self.message)
-        self.message_label = Label(master, textvariable=self.message_label_text)
-
-        self.message_label_text_2 = IntVar()
-        self.message_label_text_2.set(self.message_2)
-        self.message_label_2 = Label(master, textvariable=self.message_label_text_2)
-        
-        self.label = Label(master, text="Message:")
-
-        vcmd = master.register(self.validate) # we have to wrap the command
-        self.entry = Entry(master, validate="key", validatecommand=(vcmd, '%P'))
-        self.entry_2 = Entry(master, validate="key", validatecommand=(vcmd, '%P'))
-        
-        self.encrypt_button = Button(master, text="Encrypt", command=lambda: self.update("encrypt"))
-        self.decrypt_button = Button(master, text="Decrypt", command=lambda: self.update("decrypt"))
-        self.reset_button = Button(master, text="Reset", command=lambda: self.update("reset"))
-
-        # LAYOUT
-
-        self.label.grid(row=0, column=0, sticky=W)
-        self.message_label.grid(row=0, column=1, columnspan=2, sticky=E)
-        self.message_label_2.grid(row=2, column=1, columnspan=2, sticky=E)
-
-        self.entry.grid(row=1, column=0, columnspan=3, sticky=W+E)
-        self.entry_2.grid(row=3, column=0, columnspan=3, sticky=W+E)
-        
-        self.encrypt_button.grid(row=4, column=0)
-        self.decrypt_button.grid(row=4, column=1)
-        self.reset_button.grid(row=4, column=2, sticky=W+E)
-
-    def validate(self, new_text):
-        if not new_text: # the field is being cleared
-            self.entered_number = 'Type your message here.'
-            return True
-
-        try:
-            self.entered_number = str(new_text)
-            return True
-        except ValueError:
-            return False
+def czr_gui_encrypt(*args):
+    try:
+        input_string = str(message.get())
+        input_shift = int(shift.get())
+        message_decrypted.set(czr_full_encrypt(input_shift, input_string))
+    except ValueError:
+        pass
     
-    def update(self, method):
-        if method == "encrypt":
-            self.message = czr_full_encrypt(self.entered_number_2, self.entered_number)
-        elif method == "decrypt":
-            self.message = czr_full_encrypt(-self.entered_number_2, self.entered_number)
-        else: # reset
-            self.message = 'Enter your message here.'
-
-        self.message_label_text.set(self.message)
-        self.message_label_text_2.set(self.message_2)
-        self.entry.delete(0, END)
-
 root = Tk()
-my_gui = Czr(root)
+root.title("Caeser Shift Tool")
+
+mainframe = ttk.Frame(root, padding="3 3 12 12")
+mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+mainframe.columnconfigure(0, weight=1)
+mainframe.rowconfigure(0, weight=1)
+
+shift = StringVar()
+message = StringVar()
+message_decrypted = StringVar()
+
+shift_entry = ttk.Entry(mainframe, width=7, textvariable=shift)
+shift_entry.grid(column=2, row=1, sticky=(W, E))
+message_entry = ttk.Entry(mainframe, width=7, textvariable=message)
+message_entry.grid(column=2, row=2, sticky=(W, E))
+
+ttk.Label(mainframe, textvariable=message_decrypted).grid(column=2, row=3, sticky=(W, E))
+ttk.Button(mainframe, text="Encrypt", command=czr_gui_encrypt).grid(column=3, row=3, sticky=W)
+
+ttk.Label(mainframe, text='Shift Value:').grid(column=1, row=1, sticky=W)
+ttk.Label(mainframe, text="Message:").grid(column=1, row=2, sticky=W)
+ttk.Label(mainframe, text="Decrypted message:").grid(column=1, row=3, sticky=W)
+
+for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
+
+shift_entry.focus()
+root.bind('<Return>', czr_gui_encrypt)
+
 root.mainloop()
