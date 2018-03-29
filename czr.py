@@ -96,17 +96,17 @@ shift = StringVar()
 message = StringVar()
 message_decrypted = StringVar()
 
-shift_entry = ttk.Entry(mainframe, width=7, textvariable=shift)
-shift_entry.grid(column=2, row=1, sticky=(W, E))
+shift_entry = ttk.Entry(mainframe, width=3, textvariable=shift)
+shift_entry.grid(column=2, row=1, sticky=(W))
 message_entry = ttk.Entry(mainframe, width=7, textvariable=message)
 message_entry.grid(column=2, row=2, sticky=(W, E))
 
 ttk.Label(mainframe, textvariable=message_decrypted).grid(column=2, row=3, sticky=(W, E))
 ttk.Button(mainframe, text="Encrypt", command=czr_gui_encrypt).grid(column=3, row=3, sticky=W)
 
-ttk.Label(mainframe, text='Shift Value:').grid(column=1, row=1, sticky=W)
-ttk.Label(mainframe, text="Message:").grid(column=1, row=2, sticky=W)
-ttk.Label(mainframe, text="Decrypted message:").grid(column=1, row=3, sticky=W)
+ttk.Label(mainframe, text='Shift Value:').grid(column=1, row=1, sticky=E)
+ttk.Label(mainframe, text="Message:").grid(column=1, row=2, sticky=E)
+ttk.Label(mainframe, text="Decrypted message:").grid(column=1, row=3, sticky=E)
 
 for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
 
