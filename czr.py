@@ -80,7 +80,7 @@ def czr_gui_encrypt(*args):
     try:
         input_string = str(message.get())
         input_shift = int(shift.get())
-        message_decrypted.set(czr_full_encrypt(input_shift, input_string))
+        message_encrypted.set(czr_full_encrypt(input_shift, input_string))
     except ValueError:
         pass
     
@@ -94,19 +94,19 @@ mainframe.rowconfigure(0, weight=1)
 
 shift = StringVar()
 message = StringVar()
-message_decrypted = StringVar()
+message_encrypted = StringVar()
 
 shift_entry = ttk.Entry(mainframe, width=3, textvariable=shift)
 shift_entry.grid(column=2, row=1, sticky=(W))
 message_entry = ttk.Entry(mainframe, width=7, textvariable=message)
 message_entry.grid(column=2, row=2, sticky=(W, E))
 
-ttk.Label(mainframe, textvariable=message_decrypted).grid(column=2, row=3, sticky=(W, E))
+ttk.Label(mainframe, textvariable=message_encrypted).grid(column=2, row=3, sticky=(W, E))
 ttk.Button(mainframe, text="Encrypt", command=czr_gui_encrypt).grid(column=3, row=3, sticky=W)
 
 ttk.Label(mainframe, text='Shift Value:').grid(column=1, row=1, sticky=E)
 ttk.Label(mainframe, text="Message:").grid(column=1, row=2, sticky=E)
-ttk.Label(mainframe, text="Decrypted message:").grid(column=1, row=3, sticky=E)
+ttk.Label(mainframe, text="Encrypted message:").grid(column=1, row=3, sticky=E)
 
 for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
 
