@@ -83,6 +83,17 @@ def czr_gui_encrypt(*args):
         message_encrypted.set(czr_full_encrypt(input_shift, input_string))
     except ValueError:
         pass
+
+# Copies message_encrypted to the clipboard to be pasted
+# NOTE: You cannot paste the message from the clipboard after the window is closed on test OS
+def copy_to_clipboard(*args):
+    try:
+        input_message_encrypted = str(message_encrypted.get())
+        root.clipboard_clear()
+        root.clipboard_append(input_message_encrypted)
+        root.update()
+    except ValueError:
+        pass
     
 root = Tk()
 root.title("Caeser Shift Tool")
@@ -103,6 +114,8 @@ message_entry.grid(column=2, row=2, sticky=(W, E))
 
 ttk.Label(mainframe, textvariable=message_encrypted).grid(column=2, row=3, sticky=(W, E))
 ttk.Button(mainframe, text="Encrypt", command=czr_gui_encrypt).grid(column=3, row=3, sticky=W)
+
+ttk.Button(mainframe, text="Copy to Clipboard", command=copy_to_clipboard).grid(column=3, row=2, sticky=W)
 
 ttk.Label(mainframe, text='Shift Value:').grid(column=1, row=1, sticky=E)
 ttk.Label(mainframe, text="Message:").grid(column=1, row=2, sticky=E)
